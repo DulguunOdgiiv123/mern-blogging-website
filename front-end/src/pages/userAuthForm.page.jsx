@@ -10,17 +10,15 @@ import { UserContext } from "../App";
 
 const UserAuthForm = ({ type }) => {
 
-    const AuthForm = useRef();
-
+    const authForm = useRef();
 
     
-   
-
+ 
     const userAuthThroughServer = (serverRoute,formData) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
         .then(({data}) => {
             storeInSession("user",JSON.stringify(data))
-            console.log(sessionStorage)
+            console.log(data)
         })
         .catch(({response}) => {
             toast.error(response.data.error)
