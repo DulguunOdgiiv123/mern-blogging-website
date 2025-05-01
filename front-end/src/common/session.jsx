@@ -10,8 +10,6 @@ const removeFromSession = (key) => {
     return sessionStorage.removeItem(key)
 }
 
-const logOutUser =() => {
-    return sessionStorage.clear()
-}
 
-export {storeInSession,lookInSession,removeFromSession,logOutUser}
+
+export {storeInSession,lookInSession,removeFromSession}
