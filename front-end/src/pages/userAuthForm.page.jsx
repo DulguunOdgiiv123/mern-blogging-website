@@ -8,6 +8,7 @@ import axios from "axios"
 import { storeInSession } from "../common/session";
 import { UserContext } from "../App";
 import { Navigate } from "react-router-dom";
+import { authWithGoogle } from "../common/firebase";
 
 
 const UserAuthForm = ({ type }) => {
@@ -18,7 +19,7 @@ const UserAuthForm = ({ type }) => {
 
     console.log(access_token)
 
-
+    
     const userAuthThroughServer = (serverRoute, formData) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + serverRoute, formData)
             .then(({ data }) => {
@@ -62,6 +63,27 @@ const UserAuthForm = ({ type }) => {
             return toast.error("Password should 6 to 20 charecters long with num, lowercase uppercase")
         }
         userAuthThroughServer(serverRoute, formData)
+    }
+
+    const handleGoogleAuth = (e) => {
+
+        e.preventDefault()
+ 
+        authWithGoogle().then(user => {
+
+            let serverRoute = "/google-auth"
+
+            let formData = {
+                access_token: user.access_token
+            }
+
+            userAuthThroughServer(serverRoute,formData)
+
+        })
+        .catch(err => {
+        toast.error("cannot login")
+        return console.log(err)
+    })
     }
 
     return (
@@ -113,7 +135,7 @@ const UserAuthForm = ({ type }) => {
                         </div>
 
 
-                        <button className="btn-dark flex items-center justify-center gap-4 w-[90%] center">
+                        <button className="btn-dark flex items-center justify-center gap-4 w-[90%] center" onClick={handleGoogleAuth}>
                             <img src={googleIcon} className="w-5" />
                             Sign up with Google
                         </button>
